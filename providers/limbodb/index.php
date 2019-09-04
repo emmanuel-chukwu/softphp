@@ -15,12 +15,12 @@ class LimboDB {
       $this->db_pass = $db_pass;
    }
 
-   private function clean($string) {
+   public function clean($string) {
       return "'".$string."'";
    }
 
    public function connect() {
-      $this->conn = mysqli_connect($this->host, $this->user_name, $this->db_pass, $this->db_name) or die(mysqli_error($conn));
+      $this->conn = mysqli_connect($this->host, $this->user_name, $this->db_pass, $this->db_name) or die(mysqli_error($this->conn));
    }
 
    public function close() {
@@ -29,17 +29,17 @@ class LimboDB {
 
    public function delete($table, $where) {
       
-      $delete = "DELETE FROM ".$table." WHERE ".$where."";
+      $query = "DELETE FROM ".$table." WHERE ".$where."";
 
-      mysqli_query ($this->conn, $delete) or die (mysqli_error($this->conn) . "Delete Query = " . $delete);
+      mysqli_query ($this->conn, $query) or die (mysqli_error($this->conn) . " Delete Query = " . $query);
    }
 
    public function insert($table, $rows, $values) {
       $row = implode (',',$rows);
       $value = implode (',',$values);
-      $insert = "INSERT INTO ".$table." (".$row.") VALUES (".$value.")";
+      $query = "INSERT INTO ".$table." (".$row.") VALUES (".$value.")";
 
-      mysqli_query ($this->conn, $insert) or die (mysqli_error($this->conn) . "Insert Query = " . $insert);
+      mysqli_query ($this->conn, $query) or die (mysqli_error($this->conn) . " Insert Query = " . $query);
    }
 
    public function update($table, $rows, $values, $where = NULL) {
@@ -47,7 +47,7 @@ class LimboDB {
       if ($where === null) $query = "UPDATE ".$table." SET ".$rows." = ".$values." ";
       else $query = "UPDATE ".$table." SET ".$rows." = ".$values." WHERE ".$where." ";
 
-      mysqli_query ($this->conn, $query) or die (mysqli_error($this->conn) . "Update Query = " . $insert);
+      mysqli_query ($this->conn, $query) or die (mysqli_error($this->conn) . " Update Query = " . $query);
    }
 
    public function select($rows, $table, $where = NULL, $order = NULL, $limit = NULL, $join = NULL) {
@@ -57,7 +57,7 @@ class LimboDB {
 	   if ($order != null) $query .= " ORDER BY ". $order;
       if ($limit != null) $query .= " LIMIT ". $limit;
       
-      $select = mysqli_query($this->conn, $query) or die (mysqli_error($this->conn) . "Select Query = " . $delete);
+      $select = mysqli_query($this->conn, $query) or die (mysqli_error($this->conn) . " Select Query = " . $query);
       
       if (mysqli_num_rows($select) > 0) {
          $rows = array();
